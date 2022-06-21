@@ -14,6 +14,7 @@ module.exports = {
           error: '#f75a68',
           base900: '#09090a',
           base700: '#121214',
+          base500: '#29292e',
           base300: '#8d8d99',
           base200: '#c4c4cc',
           base100: '#e1e1e6',
