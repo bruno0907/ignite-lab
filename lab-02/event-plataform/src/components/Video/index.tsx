@@ -1,8 +1,8 @@
 export const Video = () => {
   return (    
-    <div>
+    <div className="w-full">
       <h1>Video</h1>
-      <video />
+      <video />      
     </div>
   )
 }
