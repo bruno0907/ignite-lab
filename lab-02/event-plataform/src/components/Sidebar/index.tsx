@@ -28,8 +28,8 @@ export type Lesson = {
 export const Sidebar = () => {
   const { data } = useQuery<GetLessonsQueryResponse>(GET_LESSONS_QUERY)  
 
-  function handleSelectLesson () {
-    console.log('Lesson')  
+  function handleSelectLesson (slug: string) {
+    console.log(slug)  
   }  
   
   return (

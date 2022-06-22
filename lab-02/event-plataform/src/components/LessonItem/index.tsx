@@ -3,7 +3,7 @@ import { Lesson } from "../Sidebar";
 
 type Props = {
   lesson: Lesson
-  onSelectLesson: () => void;  
+  onSelectLesson: (slug: string) => void;  
 }
 
 export const LessonItem = ({ lesson, onSelectLesson }: Props) => {
@@ -29,7 +29,7 @@ export const LessonItem = ({ lesson, onSelectLesson }: Props) => {
             group-hover:border-brand-blue300 
             transition-all            
           `}        
-          onClick={() => onSelectLesson()}
+          onClick={() => onSelectLesson(lesson.slug)}
         >
           <header className="flex items-center justify-between">          
             {isBlocked 
