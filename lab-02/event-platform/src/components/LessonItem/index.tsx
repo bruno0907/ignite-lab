@@ -1,5 +1,5 @@
 import { CheckCircle, Lock } from "phosphor-react"
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Lesson } from "../Sidebar";
 
 type Props = {
@@ -8,10 +8,11 @@ type Props = {
 }
 
 export const LessonItem = ({ lesson, onSelectLesson }: Props) => {
+  const { slug } = useParams<{ slug: string }>()
+
   const isBlocked = new Date(lesson.availableAt) > new Date()
   const lessonAvailability = new Date(lesson.availableAt).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' })
-
-  const isSelected = false
+  const isSelected = slug === lesson.slug
 
   return (
     <li className={`${isBlocked && 'cursor-not-allowed opacity-75'}`}>

@@ -15,7 +15,9 @@ const GET_LESSON_BY_SLUG_QUERY = gql`
       description    
       teacher {
         name
-      }  
+        bio
+        avatarURL
+      }
     }    
   }  
 `
@@ -41,21 +43,28 @@ type Props = {
 export const Video = ({ lesson }: Props) => {  
 
   const { data, error, loading } = useQuery<GetLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, { 
-    variables: { slug: lesson }      
-  })  
+    variables: { slug: lesson },
+    fetchPolicy: 'network-only',
+    errorPolicy: 'all',
+    returnPartialData: true,
 
-  console.log({
-    data,
-    error,
-    loading
   })
+
+  /** TODO
+   *  [ ] Loading and error handling content
+   *  [ ] No lesson selected
+   */
+
+  if(loading) return <p>Loading...</p>
+
+  if(error) return <p>Error...</p>  
 
   return (
     <section className="flex-1 overflow-y-auto scrollbar">      
       <div className="bg-black flex justify-center">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
           <Player>
-            <Youtube videoId=""/>
+            <Youtube videoId={data?.lesson.videoId!}/>
             <DefaultUi />
           </Player>
         </div>
@@ -64,26 +73,34 @@ export const Video = ({ lesson }: Props) => {
         
         <div className="flex flex-col lg:flex-row gap-14 mb-20">
           <div className="flex flex-col gap-4">
-            <h1 className="font-bold text-2xl text-brand-base100">Lesson 01 - Lesson title placeholder</h1>
-            <p className="leading-relaxed text-brand-base200">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsum ab, velit, corporis repellat eaque totam numquam perspiciatis exercitationem culpa minus voluptatum hic placeat rerum voluptates sed, at aperiam possimus harum.</p>
+            <h1 className="font-bold text-2xl text-brand-base100">
+              {data?.lesson.title}
+            </h1>
+            <p className="leading-relaxed text-brand-base200">
+              {data?.lesson.description}
+            </p>
             <div className="flex gap-4 items-center">
               <img 
-                src="https://yt3.ggpht.com/ytc/AKedOLT6ck5p3kvuEMSLqzf9aviTcwthTLwoSZnjuJAvhw=s900-c-k-c0x00ffffff-no-rj" 
-                alt="Teacher's profile picture"
+                src={data?.lesson.teacher.avatarURL} 
+                alt={`${data?.lesson.teacher.name} picture`}
                 className="rounded-full h-16 border-2 border-brand-blue200" 
               />
               <div>
-                <strong className="text-2xl text-brand-base100">Rick Beato</strong>
-                <span className="text-sm block">Music producer and composer</span>
+                <strong className="text-2xl text-brand-base100">
+                  {data?.lesson.teacher.name}
+                </strong>
+                <span className="text-sm block">
+                  {data?.lesson.teacher.bio}
+                </span>
               </div>
             </div>
           </div>
           <div className="flex flex-col gap-4">
-            <a href="#" target="_blank" rel="noopener noreferrer" className="min-w-[237px] rounded px-6 py-4 bg-brand-blue400 text-white flex items-center justify-center gap-2 hover:bg-brand-blue500 transition-all">
+            <a href="https://" target="_blank" rel="noopener noreferrer" className="min-w-[237px] rounded px-6 py-4 bg-brand-blue400 text-white flex items-center justify-center gap-2 hover:bg-brand-blue500 transition-all">
               <DiscordLogo size={24} />
               Join the community
             </a>
-            <a href="#" target="_blank" rel="noopener noreferrer" className="min-w-[237px] rounded px-6 py-4 border border-brand-blue200 text-brand-blue-200 flex items-center justify-center gap-2 hover:bg-brand-blue200 hover:text-brand-base900 transition-all">
+            <a href="https://" target="_blank" rel="noopener noreferrer" className="min-w-[237px] rounded px-6 py-4 border border-brand-blue200 text-brand-blue-200 flex items-center justify-center gap-2 hover:bg-brand-blue200 hover:text-brand-base900 transition-all">
               <Lightning size={24} />
               Access the challenge
             </a>
