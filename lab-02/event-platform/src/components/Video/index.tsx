@@ -1,16 +1,61 @@
 import { DefaultUi, Player, Youtube } from "@vime/react"
+import { useQuery } from "@apollo/client"
+import { gql } from "@apollo/client/core"
 import { CaretRight, DiscordLogo, FileArrowDown, Lightning } from "phosphor-react"
 import { Footer } from "../Footer"
 
 import '@vime/core/themes/default.css'
 
-export const Video = () => {
+const GET_LESSON_BY_SLUG_QUERY = gql`
+  query GetLessonBySlug ($slug: String) {
+    lesson (where: { slug: $slug }) {
+      id
+      title
+      videoId
+      description    
+      teacher {
+        name
+      }  
+    }    
+  }  
+`
+
+type GetLessonBySlugResponse = {
+  lesson: {
+    id: string;
+    title: string
+    videoId: string;
+    description: string;
+    teacher: {
+      name: string;
+      bio: string;
+      avatarURL: string;
+    }
+  }
+}
+
+type Props = {
+  lesson: string;
+}
+
+export const Video = ({ lesson }: Props) => {  
+
+  const { data, error, loading } = useQuery<GetLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, { 
+    variables: { slug: lesson }      
+  })  
+
+  console.log({
+    data,
+    error,
+    loading
+  })
+
   return (
     <section className="flex-1 overflow-y-auto scrollbar">      
       <div className="bg-black flex justify-center">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
           <Player>
-            <Youtube videoId="NqzdVN2tyvQ"/>
+            <Youtube videoId=""/>
             <DefaultUi />
           </Player>
         </div>

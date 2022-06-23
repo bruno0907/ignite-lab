@@ -26,14 +26,14 @@ export type Lesson = {
 }
 
 export const Sidebar = () => {
-  const { data } = useQuery<GetLessonsQueryResponse>(GET_LESSONS_QUERY)  
+  const { data } = useQuery<GetLessonsQueryResponse>(GET_LESSONS_QUERY)    
 
   function handleSelectLesson (slug: string) {
     console.log(slug)  
   }  
   
   return (
-    <aside className="w-[348px] flex flex-col gap-6 p-6 border-l bg-brand-base800 border-b rounded-bl border-brand-base500 overflow-y-auto scrollbar">
+    <aside className="w-[348px] flex flex-col gap-6 p-6 border-l bg-brand-base800 border-b rounded-bl border-brand-base500 overflow-y-auto ">
       <span className="text-2xl font-bold block">Lessons Schedule</span>      
       <ul className="flex flex-col border-t border-brand-base600 pt-6 gap-8">   
         {data?.lessons.map(lesson => (

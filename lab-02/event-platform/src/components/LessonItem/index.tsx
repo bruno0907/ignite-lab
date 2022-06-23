@@ -1,8 +1,9 @@
 import { CheckCircle, Lock } from "phosphor-react"
+import { Link } from "react-router-dom";
 import { Lesson } from "../Sidebar";
 
 type Props = {
-  lesson: Lesson
+  lesson: Lesson;
   onSelectLesson: (slug: string) => void;  
 }
 
@@ -14,7 +15,7 @@ export const LessonItem = ({ lesson, onSelectLesson }: Props) => {
 
   return (
     <li className={`${isBlocked && 'cursor-not-allowed opacity-75'}`}>
-      <a href="#" className={`flex flex-col gap-5 group ${isBlocked && 'pointer-events-none'}`}>
+      <Link to={`/event/lesson/${lesson.slug}`} className={`flex flex-col gap-5 group ${isBlocked && 'pointer-events-none'}`}>
         <span className="text-brand-base300">{lessonAvailability}</span>
         <div 
           className={`
@@ -67,7 +68,7 @@ export const LessonItem = ({ lesson, onSelectLesson }: Props) => {
 
           {isSelected && <span className="absolute w-4 h-4 top-[42%] -left-2 rotate-45 rounded-sm  bg-brand-blue400 border border-brand-blue300 border-t-brand-blue400 border-r-brand-blue400"/>}
         </div>
-      </a>      
+      </Link>      
     </li>
   )
 }
