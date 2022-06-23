@@ -10,3 +10,24 @@ body {
 #root {
   @apply flex flex-col max-w-full max-h-screen;
 }
+
+.scrollbar::-webkit-scrollbar {    
+  width: 0.9rem;
+  hieght: 0.9rem;
+  }
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 100vh;    
+  background: #121214;  
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #29292e;
+  border-radius: 100vh;    
+  border: solid 0.25rem #121214;  
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #323238;        
+}
+

@@ -6,7 +6,7 @@ export const Event = () => {
   return (
     <>
       <Header />     
-      <main className="flex overflow-hidden">
+      <main className="flex pt-16 overflow-hidden">
         <Video />
         <Sidebar />
       </main> 
