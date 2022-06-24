@@ -9,9 +9,9 @@ export const Event = () => {
   return (
     <>
       <Header />     
-      <main className="flex pt-16 overflow-hidden">
+      <main className="pt-16 flex overflow-hidden">        
         { slug ? <Video lesson={slug} /> : <div className="flex-1"/> }
-        <Sidebar />
+        <Sidebar />        
       </main> 
     </>
   )

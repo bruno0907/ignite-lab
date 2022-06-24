@@ -3,11 +3,10 @@ import { Link, useParams } from "react-router-dom";
 import { Lesson } from "../Sidebar";
 
 type Props = {
-  lesson: Lesson;
-  onSelectLesson: (slug: string) => void;  
+  lesson: Lesson;   
 }
 
-export const LessonItem = ({ lesson, onSelectLesson }: Props) => {
+export const LessonItem = ({ lesson }: Props) => {
   const { slug } = useParams<{ slug: string }>()
 
   const isBlocked = new Date(lesson.availableAt) > new Date()
@@ -30,8 +29,7 @@ export const LessonItem = ({ lesson, onSelectLesson }: Props) => {
             cursor-pointer 
             group-hover:border-brand-blue300 
             transition-all            
-          `}        
-          onClick={() => onSelectLesson(lesson.slug)}
+          `}
         >
           <header className="flex items-center justify-between">          
             {isBlocked 

@@ -43,11 +43,8 @@ type Props = {
 export const Video = ({ lesson }: Props) => {  
 
   const { data, error, loading } = useQuery<GetLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, { 
-    variables: { slug: lesson },
-    fetchPolicy: 'network-only',
-    errorPolicy: 'all',
-    returnPartialData: true,
-
+    variables: { slug: lesson },    
+    initialFetchPolicy: 'no-cache'
   })
 
   /** TODO
@@ -55,12 +52,13 @@ export const Video = ({ lesson }: Props) => {
    *  [ ] No lesson selected
    */
 
-  if(loading) return <p>Loading...</p>
+  if(loading) return <div className="flex-1">Loading...</div>
 
-  if(error) return <p>Error...</p>  
+  if(error) return <div className="flex-1">Error...</div>  
 
   return (
-    <section className="flex-1 overflow-y-auto scrollbar">      
+    <section className="flex-1 overflow-y-auto scrollbar"> 
+
       <div className="bg-black flex justify-center">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
           <Player>
@@ -69,32 +67,18 @@ export const Video = ({ lesson }: Props) => {
           </Player>
         </div>
       </div>      
-      <div className="p-8 max-w-[1100px] mx-auto">        
-        
-        <div className="flex flex-col lg:flex-row gap-14 mb-20">
+
+      <div className="p-8 max-w-[1100px] mx-auto">
+
+        <div className="flex flex-col lg:flex-row gap-14 mb-10">
           <div className="flex flex-col gap-4">
             <h1 className="font-bold text-2xl text-brand-base100">
               {data?.lesson.title}
             </h1>
             <p className="leading-relaxed text-brand-base200">
               {data?.lesson.description}
-            </p>
-            <div className="flex gap-4 items-center">
-              <img 
-                src={data?.lesson.teacher.avatarURL} 
-                alt={`${data?.lesson.teacher.name} picture`}
-                className="rounded-full h-16 border-2 border-brand-blue200" 
-              />
-              <div>
-                <strong className="text-2xl text-brand-base100">
-                  {data?.lesson.teacher.name}
-                </strong>
-                <span className="text-sm block">
-                  {data?.lesson.teacher.bio}
-                </span>
-              </div>
-            </div>
-          </div>
+            </p>            
+          </div>          
           <div className="flex flex-col gap-4">
             <a href="https://" target="_blank" rel="noopener noreferrer" className="min-w-[237px] rounded px-6 py-4 bg-brand-blue400 text-white flex items-center justify-center gap-2 hover:bg-brand-blue500 transition-all">
               <DiscordLogo size={24} />
@@ -104,6 +88,22 @@ export const Video = ({ lesson }: Props) => {
               <Lightning size={24} />
               Access the challenge
             </a>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4 mb-20 max-w-xl">
+          <img 
+            src={data?.lesson.teacher.avatarURL} 
+            alt={`${data?.lesson.teacher.name} picture`}
+            className="rounded-full h-16 border-2 border-brand-blue200" 
+          />
+          <div>
+            <strong className="text-2xl text-brand-base100 leading-loose">
+              {data?.lesson.teacher.name}
+            </strong>
+            <span className="text-sm block text-brand-base300">
+              {data?.lesson.teacher.bio}
+            </span>
           </div>
         </div>
 
@@ -133,8 +133,9 @@ export const Video = ({ lesson }: Props) => {
             </div>
           </a>
         </div>
-        <Footer />
+
       </div>
+      <Footer />
     </section>    
   )
 }
