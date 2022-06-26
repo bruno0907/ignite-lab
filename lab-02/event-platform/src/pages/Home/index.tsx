@@ -13,20 +13,27 @@ export const Home = () => {
   const nameInputRef = useRef<HTMLInputElement>(null)
   const emailInputRef = useRef<HTMLInputElement>(null)
 
-  const [createSubscriber, { data, loading }] = useCreateSubscribeMutation()
+  const [createSubscriber, { loading, error, reset }] = useCreateSubscribeMutation()
   
-  const handleSignUp = async (e: FormEvent) => {
+  const handleSubscribe = async (e: FormEvent) => {
     e.preventDefault()
-    
-    await createSubscriber({
-      variables: {
-        name: nameInputRef.current?.value.trim()!,
-        email: emailInputRef.current?.value.trim()!        
-      }
-    })
 
-    navigate('/event')
-  }
+    try {
+      await createSubscriber({
+        variables: {
+          name: nameInputRef.current?.value.trim()!,
+          email: emailInputRef.current?.value.trim()!        
+        }
+      })
+  
+      navigate('/event')
+      
+    } catch (error) {
+      console.log(error)
+
+    }
+    
+  } 
 
   return (
     <div className="w-full h-screen flex flex-col items-center bg-gradient-to-bl from-[rgba(0,0,0,.5)] via-brand-blue500 to-[rgba(0,0,0,.5)] overflow-y-auto scrollbar">
@@ -43,31 +50,35 @@ export const Home = () => {
             </h2>
           </div>
           <form className="w-full p-8 flex flex-col border-y border-y-brand-base500 bg-brand-base800 sm:border sm:rounded sm:border-brand-base500 md:max-w-[391px]" 
-            onSubmit={handleSignUp}
+            onSubmit={handleSubscribe}
           >
-            <strong className="text-xl text-brand-base100 mb-6">Sign-up for free</strong>
+            <strong className="text-xl text-brand-base100 mb-6">Subscribe for free!</strong>
             <input
               type="text"
               name="name"
               required
+              disabled={loading}
               placeholder="Your full name"
-              className="p-4 mb-2 rounded bg-brand-base900 text-brand-base100 placeholder:to-brand-base300"
+              className="p-4 mb-2 rounded bg-brand-base900 text-brand-base100 border border-brand-base800 placeholder:to-brand-base300 hover:border-brand-blue400 focus:border-brand-blue400 focus:ring-brand-blue400 focus:ring-1 focus:outline-none transition-colors"
               ref={nameInputRef}
             />
             <input
               type="email"
               name="email"
               required
+              disabled={loading}
               placeholder="Enter your email"
-              className="p-4 mb-6 rounded bg-brand-base900 text-brand-base100 placeholder:to-brand-base300"
+              className="p-4 mb-6 rounded bg-brand-base900 text-brand-base100 border border-brand-base800 placeholder:to-brand-base300 hover:border-brand-blue400 focus:border-brand-blue400 focus:ring-brand-blue400 focus:ring-1 focus:outline-none transition-colors"
               ref={emailInputRef}
-            />
+              onChange={error && reset}
+              />
+              {error && <p className="px-2 -mt-4 mb-6 text-sm text-brand-error">Email already registered!</p>}
             <button
               type="submit"
               disabled={loading}
               className="min-w-[237px] rounded px-6 py-4 bg-brand-blue400 text-white flex items-center justify-center gap-2 hover:bg-brand-blue500 disabled:opacity-50 disabled:pointer-events-none transition-all"
             >
-              {!loading ? 'Subscribe now!' : <CircleNotch size={20} className="animate-spin"/>}
+              {!loading ? 'Subscribe' : <CircleNotch size={20} className="animate-spin"/>}
               
             </button>
             <Link to="/event" className="text-brand-base300 font-regular  mt-8 self-center hover:text-brand-base100 transition-colors">I'm already an user!</Link>

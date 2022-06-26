@@ -46,7 +46,7 @@ export const Video = ({ lesson }: Props) => {
       </div>
 
       <div className="p-8 max-w-[1100px] mx-auto">
-        <div className="flex flex-col lg:flex-row gap-14 mb-10">
+        <div className="flex flex-col justify-between lg:flex-row gap-14 mb-10">
           <div className="flex flex-col gap-4">
             <h1 className="font-bold text-2xl text-brand-base100">
               {data?.lesson.title}
