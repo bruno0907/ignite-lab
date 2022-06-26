@@ -4,21 +4,8 @@ import { EventLogo } from "../../components/EventLogo"
 import Hero from '../../assets/hero.png'
 import { FormEvent, useRef } from "react"
 import { Footer } from "../../components/Footer"
-import { gql, useMutation } from "@apollo/client"
-import { CircleNotch, DotsThree } from "phosphor-react"
-
-const CREATE_SUBSCRIBER_MUTATION = gql`
-    mutation CreateSubscribe ($name: String!, $email: String!) {
-      createSubscriber(data: {name: $name, email: $email}) {
-        id
-      }
-  }
-`
-
-type CreateSubscriber = {
-  name: string;
-  email: string;
-}
+import { CircleNotch } from "phosphor-react"
+import { useCreateSubscribeMutation } from "../../graphql/schemas"
 
 export const Home = () => {
   const navigate = useNavigate()
@@ -26,19 +13,19 @@ export const Home = () => {
   const nameInputRef = useRef<HTMLInputElement>(null)
   const emailInputRef = useRef<HTMLInputElement>(null)
 
-  const [createSubscriber, { data, loading }] = useMutation<CreateSubscriber>(CREATE_SUBSCRIBER_MUTATION)
+  const [createSubscriber, { data, loading }] = useCreateSubscribeMutation()
   
   const handleSignUp = async (e: FormEvent) => {
     e.preventDefault()
     
     await createSubscriber({
       variables: {
-        name: nameInputRef.current?.value.trim(),
-        email: emailInputRef.current?.value.trim()        
+        name: nameInputRef.current?.value.trim()!,
+        email: emailInputRef.current?.value.trim()!        
       }
     })
 
-    // navigate('/event')
+    navigate('/event')
   }
 
   return (
@@ -62,6 +49,7 @@ export const Home = () => {
             <input
               type="text"
               name="name"
+              required
               placeholder="Your full name"
               className="p-4 mb-2 rounded bg-brand-base900 text-brand-base100 placeholder:to-brand-base300"
               ref={nameInputRef}
@@ -69,6 +57,7 @@ export const Home = () => {
             <input
               type="email"
               name="email"
+              required
               placeholder="Enter your email"
               className="p-4 mb-6 rounded bg-brand-base900 text-brand-base100 placeholder:to-brand-base300"
               ref={emailInputRef}

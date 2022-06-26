@@ -1,40 +1,9 @@
 import { DefaultUi, Player, Youtube } from "@vime/react"
-import { useQuery } from "@apollo/client"
-import { gql } from "@apollo/client/core"
-import { CaretRight, DiscordLogo, FileArrowDown, Lightning } from "phosphor-react"
+import { CaretRight, CircleNotch, DiscordLogo, FileArrowDown, Lightning } from "phosphor-react"
 import { Footer } from "../Footer"
 
 import '@vime/core/themes/default.css'
-
-const GET_LESSON_BY_SLUG_QUERY = gql`
-  query GetLessonBySlug ($slug: String) {
-    lesson (where: { slug: $slug }) {
-      id
-      title
-      videoId
-      description    
-      teacher {
-        name
-        bio
-        avatarURL
-      }
-    }    
-  }  
-`
-
-type GetLessonBySlugResponse = {
-  lesson: {
-    id: string;
-    title: string
-    videoId: string;
-    description: string;
-    teacher: {
-      name: string;
-      bio: string;
-      avatarURL: string;
-    }
-  }
-}
+import { useGetLessonBySlugQuery } from "../../graphql/schemas"
 
 type Props = {
   lesson: string;
@@ -42,34 +11,41 @@ type Props = {
 
 export const Video = ({ lesson }: Props) => {  
 
-  const { data, error, loading } = useQuery<GetLessonBySlugResponse>(GET_LESSON_BY_SLUG_QUERY, { 
-    variables: { slug: lesson },    
-    initialFetchPolicy: 'no-cache'
+  const { data, error, loading } = useGetLessonBySlugQuery({
+    variables: {
+      slug: lesson
+    },
+    fetchPolicy: 'no-cache'
   })
 
-  /** TODO
-   *  [ ] Loading and error handling content
-   *  [ ] No lesson selected
-   */
+  if(loading) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <CircleNotch size={40} className="animate-spin"/>
+      </div>
+    )
+  }
 
-  if(loading) return <div className="flex-1">Loading...</div>
-
-  if(error) return <div className="flex-1">Error...</div>  
+  if(error || !data || !data.lesson) {
+    return (
+      <div className="flex flex-1 items-center justify-center">
+        <p>An error has ocurried. Please try again...</p>
+        </div>
+    )
+  }
 
   return (
     <section className="flex-1 overflow-y-auto scrollbar"> 
-
       <div className="bg-black flex justify-center">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
           <Player>
-            <Youtube videoId={data?.lesson.videoId!}/>
+            <Youtube videoId={data?.lesson?.videoId!}/>
             <DefaultUi />
           </Player>
         </div>
-      </div>      
+      </div>
 
       <div className="p-8 max-w-[1100px] mx-auto">
-
         <div className="flex flex-col lg:flex-row gap-14 mb-10">
           <div className="flex flex-col gap-4">
             <h1 className="font-bold text-2xl text-brand-base100">
@@ -91,21 +67,23 @@ export const Video = ({ lesson }: Props) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 mb-20 max-w-xl">
-          <img 
-            src={data?.lesson.teacher.avatarURL} 
-            alt={`${data?.lesson.teacher.name} picture`}
-            className="rounded-full h-16 border-2 border-brand-blue200" 
-          />
-          <div>
-            <strong className="text-2xl text-brand-base100 leading-loose">
-              {data?.lesson.teacher.name}
-            </strong>
-            <span className="text-sm block text-brand-base300">
-              {data?.lesson.teacher.bio}
-            </span>
+        {data.lesson.teacher && (
+          <div className="flex items-center gap-4 mb-20 max-w-xl">
+            <img 
+              src={data?.lesson.teacher.avatarURL} 
+              alt={`${data?.lesson.teacher.name} picture`}
+              className="rounded-full h-16 border-2 border-brand-blue200" 
+            />
+            <div>
+              <strong className="text-2xl text-brand-base100 leading-loose">
+                {data?.lesson.teacher.name}
+              </strong>
+              <span className="text-sm block text-brand-base300">
+                {data?.lesson.teacher.bio}
+              </span>
+            </div>
           </div>
-        </div>
+        )}
 
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-20">
           <a href="#" className="rounded flex flex-items-stretch gap-6 overflow-hidden bg-brand-base800 hover:bg-brand-base700 transition-all">
@@ -133,7 +111,6 @@ export const Video = ({ lesson }: Props) => {
             </div>
           </a>
         </div>
-
       </div>
       <Footer />
     </section>    

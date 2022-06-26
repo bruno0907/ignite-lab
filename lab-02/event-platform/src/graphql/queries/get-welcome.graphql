@@ -1,0 +1,12 @@
+query GetWelcome {
+  welcomes (stage: PUBLISHED) {
+    title
+    description
+    videoId
+    teachers {
+      name
+      bio
+      avatarURL
+    }
+  }
+}

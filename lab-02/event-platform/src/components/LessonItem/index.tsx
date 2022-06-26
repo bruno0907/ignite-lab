@@ -1,21 +1,23 @@
 import { CheckCircle, Lock } from "phosphor-react"
 import { Link, useParams } from "react-router-dom";
-import { Lesson } from "../Sidebar";
 
 type Props = {
-  lesson: Lesson;   
+  slug: string;   
+  availableAt: Date;
+  lessonType: string;
+  title: string;
 }
 
-export const LessonItem = ({ lesson }: Props) => {
-  const { slug } = useParams<{ slug: string }>()
+export const LessonItem = ({ slug, title, lessonType, availableAt }: Props) => {
+  const params = useParams<{ slug: string }>()
 
-  const isBlocked = new Date(lesson.availableAt) > new Date()
-  const lessonAvailability = new Date(lesson.availableAt).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' })
-  const isSelected = slug === lesson.slug
+  const isBlocked = new Date(availableAt) > new Date()
+  const lessonAvailability = new Date(availableAt).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' })
+  const isSelected = params.slug === slug
 
   return (
     <li className={`${isBlocked && 'cursor-not-allowed opacity-75'}`}>
-      <Link to={`/event/lesson/${lesson.slug}`} className={`flex flex-col gap-5 group ${isBlocked && 'pointer-events-none'}`}>
+      <Link to={`/event/lesson/${slug}`} className={`flex flex-col gap-5 group ${isBlocked && 'pointer-events-none'}`}>
         <span className="text-brand-base300">{lessonAvailability}</span>
         <div 
           className={`
@@ -60,10 +62,10 @@ export const LessonItem = ({ lesson }: Props) => {
               text-xs 
               ${isBlocked ? 'text-brand-blue300' : 'text-white'} 
               font-bold
-            `}>{lesson.lessonType === 'live' ? 'LIVE' : 'CLASS'}</span>
+            `}>{lessonType === 'live' ? 'LIVE' : 'CLASS'}</span>
           </header>
 
-          <strong className="text-brand-base200">{lesson.title}</strong>
+          <strong className="text-brand-base200">{title}</strong>
 
           {isSelected && <span className="absolute w-4 h-4 top-[42%] -left-2 rotate-45 rounded-sm  bg-brand-blue400 border border-brand-blue300 border-t-brand-blue400 border-r-brand-blue400"/>}
         </div>
