@@ -4,6 +4,21 @@ import { EventLogo } from "../../components/EventLogo"
 import Hero from '../../assets/hero.png'
 import { FormEvent, useRef } from "react"
 import { Footer } from "../../components/Footer"
+import { gql, useMutation } from "@apollo/client"
+import { CircleNotch, DotsThree } from "phosphor-react"
+
+const CREATE_SUBSCRIBER_MUTATION = gql`
+    mutation CreateSubscribe ($name: String!, $email: String!) {
+      createSubscriber(data: {name: $name, email: $email}) {
+        id
+      }
+  }
+`
+
+type CreateSubscriber = {
+  name: string;
+  email: string;
+}
 
 export const Home = () => {
   const navigate = useNavigate()
@@ -11,15 +26,19 @@ export const Home = () => {
   const nameInputRef = useRef<HTMLInputElement>(null)
   const emailInputRef = useRef<HTMLInputElement>(null)
 
-  const handleSignUp = (e: FormEvent) => {
+  const [createSubscriber, { data, loading }] = useMutation<CreateSubscriber>(CREATE_SUBSCRIBER_MUTATION)
+  
+  const handleSignUp = async (e: FormEvent) => {
     e.preventDefault()
-
-    console.log({
-      name: nameInputRef.current?.value,
-      email: emailInputRef.current?.value
+    
+    await createSubscriber({
+      variables: {
+        name: nameInputRef.current?.value.trim(),
+        email: emailInputRef.current?.value.trim()        
+      }
     })
 
-    navigate('/event')
+    // navigate('/event')
   }
 
   return (
@@ -56,9 +75,11 @@ export const Home = () => {
             />
             <button
               type="submit"
-              className="min-w-[237px] rounded px-6 py-4 bg-brand-blue400 text-white flex items-center justify-center gap-2 hover:bg-brand-blue500 transition-all"
+              disabled={loading}
+              className="min-w-[237px] rounded px-6 py-4 bg-brand-blue400 text-white flex items-center justify-center gap-2 hover:bg-brand-blue500 disabled:opacity-50 disabled:pointer-events-none transition-all"
             >
-              Sign-up now!
+              {!loading ? 'Subscribe now!' : <CircleNotch size={20} className="animate-spin"/>}
+              
             </button>
             <Link to="/event" className="text-brand-base300 font-regular  mt-8 self-center hover:text-brand-base100 transition-colors">I'm already an user!</Link>
           </form>
