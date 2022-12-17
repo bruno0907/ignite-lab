@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-brand-base900 text-brand-base200;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  @apply flex flex-col max-w-full max-h-screen;
+}
+
+.scrollbar::-webkit-scrollbar {    
+  width: 0.9rem;
+  height: 0.9rem;
+  }
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 100vh;    
+  background: #121214;  
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #29292e;
+  border-radius: 100vh;    
+  border: solid 0.25rem #121214;  
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #323238;        
+}
+
