@@ -21,5 +21,13 @@ export class NotificationsController {
       category,
       recipientId,
     });
+    console.log({
+      message: 'Notification Sent',
+      payload: {
+        content,
+        category,
+        recipientId,
+      },
+    });
   }
 }
