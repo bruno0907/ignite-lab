@@ -2,7 +2,7 @@
 
 This repo intented for holding the contents from Rocketseat Ignite Lab events that I took part of.
 
-## Event Plataform
+## Event Plataform - [Live link here](https://rocket-event.vercel.app/)
 
 This is a platform project for events like online clases
 
