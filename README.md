@@ -22,3 +22,13 @@ This is a microservice for notifications. It contains a Consumer and a Provider.
 - Prisma
 - Nest
 - Kafka
+
+## Rocket-help
+
+This is a React Native mobile project for openning and management of repair tickets
+
+- React Native
+- Expo
+- Firebase
+- React-hook-form
+- Yup
