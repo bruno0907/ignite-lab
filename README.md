@@ -27,6 +27,7 @@ This is a microservice for notifications. It contains a Consumer and a Provider.
 
 This is a React Native mobile project for openning and management of repair tickets
 
+### Techs used:
 - React Native
 - Expo
 - Firebase
